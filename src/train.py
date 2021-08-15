@@ -1,3 +1,4 @@
+from argparse import Namespace
 import tokenizers
 import torch
 from torch.utils.data import DataLoader
@@ -14,6 +15,7 @@ from guacamol.utils.chemistry import canonicalize
 class TransformerLightningModel(pl.LightningModule):
     def __init__(self, hparams):
         super(TransformerLightningModel, self).__init__()
+        hparams = Namespace(**hparams) if isinstance(hparams, dict) else hparams
         self.save_hyperparameters(hparams)
 
         self.model = Seq2SeqTransformer(
