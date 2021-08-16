@@ -42,8 +42,8 @@ class TransformerLightningModel(pl.LightningModule):
                 )
 
         self.dataset = Smiles2SmilesDataset(
-            randomize_src=~hparams.deterministic_src, 
-            randomize_tgt=~hparams.deterministic_tgt, 
+            randomize_src=(not hparams.deterministic_src), 
+            randomize_tgt=(not hparams.deterministic_tgt), 
             subsample_ratio=hparams.subsample_ratio
             )
         self.tokenizer = load_tokenizer()

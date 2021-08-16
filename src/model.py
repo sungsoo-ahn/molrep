@@ -38,8 +38,9 @@ def compute_accs(logits, tgt):
     preds = torch.argmax(logits, dim=-1)
     correct = (preds == tgt)
     correct[tgt == 0] = True
+
     acc_elem = correct[tgt != 0].float().mean()
-    acc_seq = correct.view(batch_size, -1).all(dim=1).float().mean()
+    acc_seq = correct.view(batch_size, -1).all(dim=0).float().mean()
 
     return acc_elem, acc_seq
 
@@ -180,6 +181,7 @@ class VQSeq2SeqTransformer(Seq2SeqTransformer):
             )
         acc_elem, acc_seq = compute_accs(logits, tgt_out)
         loss = loss_recon + loss_vq
+
         statistics = {
             "loss/recon": loss_recon,
             "loss/vq": loss_vq,
