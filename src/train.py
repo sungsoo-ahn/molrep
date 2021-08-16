@@ -44,6 +44,7 @@ class TransformerLightningModel(pl.LightningModule):
         self.dataset = Smiles2SmilesDataset(
             randomize_src=(not hparams.deterministic_src), 
             randomize_tgt=(not hparams.deterministic_tgt), 
+            randomize_sync=(not hparams.deterministic_sync),
             subsample_ratio=hparams.subsample_ratio
             )
         self.tokenizer = load_tokenizer()
@@ -68,6 +69,7 @@ class TransformerLightningModel(pl.LightningModule):
 
         parser.add_argument("--deterministic_src", action="store_true")
         parser.add_argument("--deterministic_tgt", action="store_true")
+        parser.add_argument("--deterministic_sync", action="store_true")
         parser.add_argument("--subsample_ratio", type=float, default=1.0)
         
         return parser
