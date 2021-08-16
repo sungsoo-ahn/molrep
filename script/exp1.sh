@@ -1,5 +1,6 @@
 #!/bin/bash
 
 python train.py \
---checkpoint_path ../resource/checkpoint/homoencoder.pth \
---tags homoencoder 
+--vq_codebook_size 50 \
+--checkpoint_path ../resource/checkpoint/codebook50.pth \
+--tags codebook50

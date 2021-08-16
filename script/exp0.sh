@@ -1,7 +1,6 @@
 #!/bin/bash
 
 python train.py \
---randomize_src \
---randomize_tgt \
---checkpoint_path ../resource/checkpoint/heteroencoder.pth \
---tags heteroencoder
+--vq_codebook_size 10 \
+--checkpoint_path ../resource/checkpoint/codebook10.pth \
+--tags codebook10

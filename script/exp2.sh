@@ -1,6 +1,6 @@
 #!/bin/bash
 
 python train.py \
---randomize_src \
---checkpoint_path ../resource/checkpoint/randomize_src.pth \
---tags randomize_src
+--vq_codebook_size 100 \
+--checkpoint_path ../resource/checkpoint/codebook100.pth \
+--tags codebook100

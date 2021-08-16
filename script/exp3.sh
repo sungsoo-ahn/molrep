@@ -1,6 +1,6 @@
 #!/bin/bash
 
 python train.py \
---randomize_tgt \
---checkpoint_path ../resource/checkpoint/randomize_tgt.pth \
---tags randomize_tgt
+--continuous \
+--checkpoint_path ../resource/checkpoint/continuous.pth \
+--tags continuous

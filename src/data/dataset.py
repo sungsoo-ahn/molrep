@@ -14,8 +14,12 @@ def randomize_smiles(smiles):
     return smiles
 
 class Smiles2SmilesDataset(Dataset):
-    def __init__(self, randomize_src=False, randomize_tgt=False, max_len=50):
+    def __init__(self, randomize_src=False, randomize_tgt=False, subsample_ratio=1.0, max_len=50):
         self.smiles_list = Path("../resource/data/smiles_list.txt").read_text(encoding="utf-8").splitlines()
+        if subsample_ratio < 1.0:
+            subsample_len = int(subsample_ratio * len(self.smiles_list))
+            self.smiles_list = self.smiles_list[:subsample_len]
+            
         self.tokenizer = load_tokenizer()
         self.max_len = max_len
         self.randomize_src = randomize_src
