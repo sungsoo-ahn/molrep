@@ -14,7 +14,15 @@ def randomize_smiles(smiles):
     return smiles
 
 class Smiles2SmilesDataset(Dataset):
-    def __init__(self, randomize_src=False, randomize_tgt=False, randomize_sync=False, subsample_ratio=1.0, max_len=50):
+    def __init__(
+        self, 
+        randomize_src=False, 
+        randomize_tgt=False, 
+        randomize_sync=False, 
+        randomize_async=False, 
+        subsample_ratio=1.0, 
+        max_len=50
+        ):
         self.smiles_list = Path("../resource/data/smiles_list.txt").read_text(encoding="utf-8").splitlines()
         if subsample_ratio < 1.0:
             subsample_len = int(subsample_ratio * len(self.smiles_list))
@@ -25,7 +33,7 @@ class Smiles2SmilesDataset(Dataset):
         self.randomize_src = randomize_src
         self.randomize_tgt = randomize_tgt
         self.randomize_sync = randomize_sync
-
+        self.randomize_async = randomize_async
     def __len__(self):
         return len(self.smiles_list)
 
@@ -33,12 +41,14 @@ class Smiles2SmilesDataset(Dataset):
         smiles0 = smiles1 = self.smiles_list[idx]
         if self.randomize_src:
             smiles0 = randomize_smiles(smiles0)
-
-        if self.randomize_tgt:    
+        elif self.randomize_tgt:    
+            smiles1 = randomize_smiles(smiles1)
+        elif self.randomize_sync:
+            smiles0 = smiles1 = randomize_smiles(smiles0)
+        elif self.randomize_async:
+            smiles0 = randomize_smiles(smiles0)
             smiles1 = randomize_smiles(smiles1)
 
-        if self.randomize_sync:
-            smiles0 = smiles1 = randomize_smiles(smiles0)
 
         x0 = self.tensorize(smiles0)
         x1 = self.tensorize(smiles1)

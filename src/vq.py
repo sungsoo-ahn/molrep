@@ -9,7 +9,7 @@ def laplace_smoothing(x, n_categories, eps=1e-5):
     return (x + eps) / (x.sum() + n_categories * eps)
 
 class VectorQuantizeLayer(nn.Module):
-    def __init__(self, dim, n_embed, decay=0.8, commitment=1., eps=1e-5):
+    def __init__(self, dim, n_embed, decay=0.99, commitment=1., eps=1e-5):
         super().__init__()
 
         self.dim = dim

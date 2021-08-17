@@ -65,6 +65,7 @@ class Seq2SeqTransformer(nn.Module):
             num_decoder_layers=num_decoder_layers,
             dim_feedforward=dim_feedforward,
             dropout=dropout,
+            activation="gelu",
         )
         self.generator = nn.Linear(emb_size, tgt_vocab_size)
         self.src_tok_emb = TokenEmbedding(src_vocab_size, emb_size)
@@ -79,8 +80,9 @@ class Seq2SeqTransformer(nn.Module):
         tgt_out = tgt[1:, :]
 
         src_mask, tgt_mask, src_key_padding_mask, tgt_key_padding_mask = create_mask(src, tgt_input)
-        memory = self.encode(src, src_mask, src_key_padding_mask)
-        outs = self.decode(tgt_input, memory, tgt_mask, tgt_key_padding_mask, src_key_padding_mask)
+        outs = self.encode(src, src_mask, src_key_padding_mask)
+        
+        outs = self.decode(tgt_input, outs, tgt_mask, tgt_key_padding_mask, src_key_padding_mask)
         logits = self.generator(outs)
         loss_recon = torch.nn.functional.cross_entropy(
             logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1), ignore_index=0
@@ -147,6 +149,7 @@ class VQSeq2SeqTransformer(Seq2SeqTransformer):
             num_decoder_layers=num_decoder_layers,
             dim_feedforward=dim_feedforward,
             dropout=dropout,
+            activation="gelu",
         )
         self.generator = nn.Linear(emb_size, tgt_vocab_size)
         self.src_tok_emb = TokenEmbedding(src_vocab_size, emb_size)
